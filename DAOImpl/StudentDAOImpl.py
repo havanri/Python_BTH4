@@ -27,14 +27,15 @@ class StudentDAOImpl(StudentDAO):
             print("Failed to get all record: {}".format(error))
 
     def insert(self, student):
-        print(student)
+        print(student.masv)
         try:
             connection = self.conn
             cursor = connection.cursor()
-            insertQuery = "INSERT INTO students(masv, firstname, lastname, dob, math, physical, chemistry) VALUES(%s, %s, %s, %s, %s, %s, %s)"
-            val = (
-            student[0], student[1], student[2], datetime.strptime(student[3], '%d/%m/%Y'), student[4], student[5],
-            student[6])
+            insertQuery = "INSERT INTO students(masv, firstname, lastname, dob, math, physical, chemistry) " \
+                          "VALUES(%s, %s, %s, %s, %s, %s, %s)"
+            val = (student.masv, student.firstname, student.lastname, datetime.strptime(student.dob, '%d/%m/%Y'),
+            student.math, student.physical,
+            student.chemistry)
             cursor.execute(insertQuery, val)
             connection.commit()
             print("Thêm sinh viên thành công")
@@ -53,8 +54,8 @@ class StudentDAOImpl(StudentDAO):
             sql_update_query = "Update students set masv = %s, firstname = %s, lastname = %s, dob = %s, " \
                                "math = %s, physical = %s, chemistry = %s where id = %s"
             val = (
-            student[0], student[1], student[2], datetime.strptime(student[3], '%d/%m/%Y'), student[4], student[5],
-            student[6], student[7])
+                student[0], student[1], student[2], datetime.strptime(student[3], '%d/%m/%Y'),
+                student[4], student[5], student[6], student[7])
             cursor.execute(sql_update_query, val)
             connection.commit()
             print("Record Updated successfully ")

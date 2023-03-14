@@ -1,5 +1,5 @@
 from DAOImpl.StudentDAOImpl import StudentDAOImpl
-
+from Entities.Student import  Student
 def menu():
     print("MENU")
     print("1. Hiển thị từ các sinh viên")
@@ -37,7 +37,9 @@ while True:
         math = float(input("Nhập điểm toán: "))
         physics = float(input("Nhập điểm lý: "))
         chemistry = float(input("Nhập điểm hóa: "))
-        studentDAO.insert((code, firstName, lastName, dob, math, physics, chemistry))
+        print(firstName)
+        student = Student(code, firstName, lastName, dob, math, physics, chemistry)
+        studentDAO.insert(student)
     elif choice == "3":
         studentId = input('Nhập id muốn cập nhật: ')
         student = studentDAO.findById(studentId)
@@ -54,11 +56,13 @@ while True:
             math = float(input("Nhập điểm toán: "))
             physics = float(input("Nhập điểm lý: "))
             chemistry = float(input("Nhập điểm hóa: "))
-
-            studentDAO.update((code, firstName, lastName, dob, math, physics, chemistry, studentId))
+            studentDAO.update((code, firstName, lastName, dob, math, physics, chemistry,studentId))
             print("After updating record ")
             studentAfterUpdated = studentDAO.findById(studentId)
-            print(studentAfterUpdated)
+            print('| {:3d} | {:12s} | {:20s} | {:10s} | {:10s} | {:10.2f} | {:10.2f} | {:10.2f} |'
+                  .format(studentAfterUpdated[0], studentAfterUpdated[1], studentAfterUpdated[2], studentAfterUpdated[3],
+                          studentAfterUpdated[4].strftime("%d-%m-%Y"), studentAfterUpdated[5],
+                          studentAfterUpdated[6], studentAfterUpdated[7]))
     elif choice == "4":
         studentId = input('Nhập id muốn xoá: ')
         student = studentDAO.findById(studentId)
