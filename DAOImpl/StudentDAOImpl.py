@@ -1,4 +1,7 @@
 from datetime import datetime
+
+from MySQLdb._mysql import connection
+
 from DAO import DB
 from DAO.StudentDAO import StudentDAO
 
@@ -15,14 +18,10 @@ class StudentDAOImpl(StudentDAO):
 
             # Update single record now
             sql_get_all = "select * from students"
-
-            print("==== List Student ====")
             cursor.execute(sql_get_all)
             record = cursor.fetchall()
-            print(record)
-
-            connection.close()
-
+            connection.commit()
+            return record
         except connection.Error as error:
             connection.close()
             print("Failed to get all record: {}".format(error))
@@ -39,7 +38,6 @@ class StudentDAOImpl(StudentDAO):
             cursor.execute(insertQuery, val)
             connection.commit()
             print("Thêm sinh viên thành công")
-            connection.close()
         except connection.Error as error:
             connection.rollback()
             connection.close()
@@ -61,8 +59,6 @@ class StudentDAOImpl(StudentDAO):
             connection.commit()
             print("Record Updated successfully ")
 
-            print("After updating record ")
-            connection.close()
 
         except connection.Error as error:
             connection.rollback()
@@ -78,8 +74,9 @@ class StudentDAOImpl(StudentDAO):
             sql_find_query = "select * from students where id =" + studentId
             cursor.execute(sql_find_query)
             record = cursor.fetchone()
+
+            connection.commit()
             return record
-            connection.close()
         except connection.Error as error:
             connection.rollback()
             connection.close()
@@ -93,10 +90,9 @@ class StudentDAOImpl(StudentDAO):
             # Update single record now
             sql_delete_query = "DELETE FROM students where id =" + studentId
             cursor.execute(sql_delete_query)
-            print('Delete Completely!!!')
-            connection.close()
+            print("Deleted sucessfully")
+            connection.commit()
         except connection.Error as error:
             connection.rollback()
             connection.close()
             print("Failed to delete table record: {}".format(error))
-        print("student")
